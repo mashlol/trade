@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+    -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important;
+    outline: none !important;
+}
+
+body {
+    background: #111;
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
+    overflow: hidden;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 885px;
+    height: 571px;
+    margin: -285px 0 0 -442.5px;
+    z-index: 100;
+}
+
+.instructions {
+    width: 300px;
+    padding: 10px 5px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.instructions h1 {
+    color: #fff;
+    /*border-bottom: 1px solid #444;*/
+    margin-bottom: 10px;
+}
+
+.instructions p {
+    margin-bottom: 10px;
+}
+
+.screenshots {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.android {
+    background: url(./img/android.png);
+    background-size: 100%;
+    width: 338px;
+    height: 571.4px;
+    position: relative;
+    top: -34px;
+    left: -20px;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.android-screen {
+    background: url(./img/android-screen.png);
+    background-size: 100%;
+    width: 217px;
+    height: 384px;
+    position: absolute;
+    top: 87px;
+    left: 60px;
+}
+
+.iphone {
+    background: url(./img/iphone.png);
+    background-size: 100%;
+    width: 238.5px;
+    height: 464px;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    top: 20px;
+}
+
+.iphone-screen {
+    background: url(./img/iphone-screen.png);
+    background-size: 100%;
+    position: absolute;
+    width: 206px;
+    height: 307px;
+    top: 80px;
+    left: 18px;
+}
+
+.reflection {
+    -webkit-transform: scaleY(-1);
+    top: calc(50% + 409px);
+    z-index: 20;
+    /*margin-bottom: 5px;*/
+    /*height: 985px;*/
+}
+
+.reflection .iphone {
+    -webkit-transform: rotateY(180deg);
+}
+
+.reflect-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: -webkit-linear-gradient(top, #111 0%, #111 70%, rgba(255,255,255,0) 100%);
+    z-index: 200;
+}
+
+.scroll-stop {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+strong {
+    font-weight: 500;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
