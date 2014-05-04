@@ -1,5 +1,5 @@
 {
-    "name": "stock-search",
+    "name": "trade",
     "version": "0.0.1",
     "dependencies": {
         "express": ""
