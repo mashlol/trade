@@ -148,6 +148,10 @@ body {
     color: #3498db;
 }
 
+.history strong.price-each {
+    color: #f1c40f;
+}
+
 .history-container {
     padding: 10px 5px;
 }

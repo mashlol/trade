@@ -328,6 +328,7 @@
 		this.$el.find(".amt").html(this.transaction.amount);
 		this.$el.find(".date").html(new Date(this.transaction.date).toLocaleString());
 		this.$el.find(".price").html(window.formatMoney(this.transaction.price));
+		this.$el.find(".price-each").html(window.formatMoney(this.transaction.price / this.transaction.amount));
 	};
 
 	window.HistoryView = HistoryView;
