@@ -1,0 +1,7 @@
+{
+    "name": "stock-search",
+    "version": "0.0.1",
+    "dependencies": {
+        "express": ""
+      }
+}

@@ -1,0 +1,420 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+    -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important;
+    outline: none !important;
+}
+
+body {
+    background: #eee;
+    color: #555;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    overflow: hidden;
+}
+
+.templates {
+    display: none;
+}
+
+.title {
+    height: 50px;
+    background: #16a085;
+    color: #fff;
+    padding: 0px 5px;
+    line-height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+}
+
+.title h1 {
+    font-size: 16px;
+    font-weight: 300;
+    display: inline;
+    position: absolute;
+    margin-left: -30px;
+    left: 50%;
+}
+
+.title button::selection {
+    border: none;
+}
+
+.title button {
+    background: none;
+    border: none;
+    color: #dfdfdf;
+    position: absolute;
+    top: 18px;
+    right: 10px;
+}
+
+.title button i {
+    font-size: 16px;
+}
+
+.pull-to-refresh {
+    margin-top: -50px;
+    height: 50px;
+}
+
+.search-bar {
+    width: 100%;
+    height: 50px;
+    padding: 10px 5px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.search-bar .search-icon {
+    position: absolute;
+    top: 18px;
+    right: 10px;
+    font-size: 20px;
+    color: #aaa;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 10px;
+    border-radius: 0px;
+    border: 0;
+    box-shadow: 0px 3px 6px -4px #444;
+}
+
+.tab-containers {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0%;
+    -webkit-transition: all 120ms ease-in-out;
+    -webkit-transform: translate3d(0,0,0);
+}
+
+.tab-container-wrapper {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    height: calc( 100% - 100px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.container#search {
+    left: 100%;
+}
+
+.container#history {
+    left: 200%;
+}
+
+.history-container .history {
+    background: #fff;
+    padding: 10px 5px;
+    text-align: center;
+    box-shadow: 0px 3px 6px -4px #444;
+    margin-bottom: 10px;
+}
+
+.history strong.sym {
+    font-weight: 400;
+}
+
+.history .date {
+    font-size: 11px;
+    margin-bottom: 7px;
+}
+
+.history strong.amt {
+    color: #2ecc71;
+}
+
+.history strong.price {
+    color: #3498db;
+}
+
+.history-container {
+    padding: 10px 5px;
+}
+
+.container::-webkit-scrollbar {
+    width: 0 !important;
+    display: none !important;
+}
+
+.portfolio {
+    padding: 10px 5px;
+}
+
+.portfolio h1 {
+    font-size: 16px;
+    padding: 5px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.no-results {
+    text-align: center;
+    display: none;
+}
+
+.no-portfolio {
+    text-align: center;
+    display: none;
+}
+
+.no-history {
+    text-align: center;
+    display: none;
+}
+
+.search-container {
+    margin: 0px 5px 10px 5px;
+}
+
+.stock-list {
+    -webkit-perspective: 8800px;
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+}
+
+.stock-list .stock .rmv-btn-container {
+    margin-top: 31px;
+}
+
+.stock-list .stock .front .amount-owned {
+    float: left;
+}
+
+.stock-list .stock .front .row {
+    margin-top: 40px;
+}
+
+.stock-list .stock .right {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+}
+
+.stock-list .stock .row {
+    margin-bottom: 5px;
+    text-align: right;
+}
+
+.stock-list .stock .incr-button,
+.stock-list .stock .decr-button {
+    width: 60px;
+}
+
+.stock-list .stock button {
+    padding: 15px;
+    border: 0;
+    color: #fff;
+    border-radius: 0px;
+    border: 2px solid #3498db;
+    background: #fff;
+    color: #3498db;
+    /*border-bottom: 2px solid #2980b9;*/
+    width: 92px;
+}
+
+.stock-list .stock .amount-trading {
+    border: 2px solid #34495e;
+    color: #34495e;
+    padding: 15px 5px;
+    width: 60px;
+    display: inline-block;
+    /*height: 50px;*/
+    /*border-bottom: 2px solid #2c3e50;*/
+    /*color: #fff;*/
+    text-align: center;
+    border-radius: 0px;
+    vertical-align: top;
+}
+
+.stock-list .stock .buy-button {
+    border: 2px solid #2ecc71;
+    color: #2ecc71;
+    /*border-bottom: 2px solid #27ae60;*/
+}
+
+.stock-list .stock .sell-button {
+    border: 2px solid #1abc9c;
+    color: #1abc9c;
+    /*border-bottom: 2px solid #16a085;*/
+}
+
+.stock-list .stock .portfolio-remove {
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
+    /*border-bottom: 2px solid #c0392b;*/
+}
+
+.stock-list .stock .portfolio-add {
+    border: 2px solid #2ecc71;
+    color: #2ecc71;
+    /*border-bottom: 2px solid #c0392b;*/
+}
+
+.stock-list .stock button:disabled {
+    border: 2px solid #ccc;
+    color: #ccc;
+    /*border-bottom: 2px solid #aaa;*/
+}
+
+.stock-list .stock .front {
+    z-index: 2;
+}
+
+.stock-list .stock .back {
+    -webkit-transform: rotateY(-180deg);
+}
+
+.stock-list .stock .front,
+.stock-list .stock .back {
+    padding: 10px 5px;
+    background: #fff;
+    box-shadow: 0px 3px 6px -4px #444;
+    height: 120px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    -webkit-backface-visibility: hidden;
+    -webkit-transition: all 500ms ease-in-out;
+}
+
+.stock-list .stock {
+    position: relative;
+    margin-bottom: 10px;
+    -webkit-transform-style: preserve-3d;
+    -webkit-perspective: 5800px;
+    height: 120px;
+
+    opacity: 0;
+    -webkit-transition: all 300ms ease-in-out;
+}
+
+.stock-list .stock.flipped .back {
+    -webkit-transform: rotateY(0);
+}
+
+
+.stock-list .stock.flipped .front {
+    -webkit-transform: rotateY(180deg);
+}
+
+.stock-list .stock .symbol {
+    font-weight: 400;
+}
+
+.stock-list .stock .price {
+    float: right;
+    margin-right: 15px;
+    color: #3498db;
+    width: 62px;
+    text-align: right;
+}
+
+.stock-list .stock .percent {
+    float: right;
+    margin-right: 15px;
+    width: 62px;
+    text-align: right;
+}
+
+.stock-list .stock .points {
+    float: right;
+    margin-right: 15px;
+    width: 62px;
+    text-align: right;
+}
+
+.green {
+    color: #2ecc71;
+}
+
+.red {
+    color: #e95748;
+}
+
+.red:before {
+    content: "-";
+}
+
+.loader {
+    text-align: center;
+}
+
+.loader .load-bar {
+    height: 40px;
+    width: 6px;
+    background: #34495e;
+    display: inline-block;
+    margin-right: 5px;
+    -webkit-transition: all 500ms ease-in-out;
+    -webkit-transform: rotateX(90deg);
+}
+
+.loader .load-bar.rotated {
+    -webkit-transform: rotateX(180deg);
+}
+
+.tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    background: #fff;
+    font-size: 0;
+    line-height: 50px;
+    /*border-top: 1px solid #ccc;*/
+    /*box-shadow: 0px 0px 5px 5px #888;*/
+    box-shadow: 0px 3px 11px 3px #888;
+}
+
+.tabs .tab {
+    display: inline-block;
+    width: 33.333%;
+    font-size: 16px;
+    text-align: center;
+    color: #222;
+}
+
+.tabs .selected-bar {
+    width: 33.333%;
+    height: 5px;
+    background: #16a085;
+    position: absolute;
+    left: 0%;
+    top: 0;
+    -webkit-transition: all 120ms ease-in-out;
+}
+
+.tabs .tab i {
+    margin-right: 8px;
+}
+
+.bought {
+    color: #16a085;
+}
+
+.sold {
+    color: #e74c3c;
+}

@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+    <title>Trade</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./font-awesome.min.css" />
+
+    <link rel="icon" sizes="196x196" href="trade-icon.png">
+    <link rel="apple-touch-icon" href="trade-icon.png"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="./script.js"></script>
+    <!-- <script src="./pull-to-refresh.js"></script> -->
+</head>
+<body>
+    <div class="templates">
+        <div id="template-stock">
+            <div class="stock">
+                <div class="front">
+                    <span class="symbol"></span>
+                    <span class="percent"></span>
+                    <span class="points"></span>
+                    <span class="price"></span>
+                    <div class="name"></div>
+                    <div class="row">
+                        <span class="amount-owned"><span class="amount-owned-num">5</span> shares owned</span>
+                        <span class="total-value">Total value <span class="total-value-num">$5.8M USD</span></span>
+                    </div>
+                </div>
+                <div class="back">
+                    <span class="amount-owned"><span class="amount-owned-num">5</span> shares owned</span>
+                    <div class="rmv-btn-container">
+                        <button class="portfolio-remove">Remove</button>
+                    </div>
+                    <div class="right">
+                        <div class="row">
+                            <button class="incr-button"><i class="fa fa-plus"></i></button>
+                            <input type="number" class="amount-trading" />
+                            <button class="decr-button"><i class="fa fa-minus"></i></button>
+                        </div>
+                        <div class="row">
+                            <button class="sell-button">Sell</button>
+                            <button class="buy-button">Buy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="template-loader">
+            <div class="loader">
+                <div class="load-bar"></div>
+                <div class="load-bar"></div>
+                <div class="load-bar"></div>
+            </div>
+        </div>
+        <div id="template-history">
+            <div class="history">
+                <div class="date">
+                    May 1/14
+                </div>
+                <div class="sentence">
+                    You <strong class="bought-sold bought">bought</strong> <strong class="amt">23</strong> shares of <strong class="sym">GOOG</strong> for <strong class="price">$5.2K USD</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="title">
+        <span class="money-amt"></span>
+        <h1>Portfolio</h1>
+    </div>
+
+    <div class="tab-container-wrapper">
+        <div class="tab-containers">
+            <div id="portfolio" class="container">
+                <div class="pull-to-refresh">
+                    <div class="pull-to-refresh-text">Release to refresh<i class="fa fa-search search-icon"></i></div>
+                </div>
+                <div class="portfolio">
+                    <div class="portfolio-container">
+                        <div class="stock-list">
+                        </div>
+                        <div class="no-portfolio">
+                            Your portfolio is empty
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="search" class="container">
+                <div class="search-bar">
+                    <input type="text" placeholder="Type stock symbol to search..." />
+                    <i class="fa fa-search search-icon"></i>
+                </div>
+                <div class="search-container">
+                    <div class="stock-list">
+                    </div>
+                    <div class="no-results">
+                        No results
+                    </div>
+                </div>
+            </div>
+
+            <div id="history" class="container">
+                <div class="history-container">
+                    <div class="history-list">
+                    </div>
+                    <div class="no-history">
+                        No history - go buy/sell some stocks!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="selected-bar"></div>
+        <div class="tab tab-portfolio selected" data-tab-name="Portfolio" data-tab-offset="0%"><i class="fa fa-gavel"></i>Portfolio</div>
+        <div class="tab tab-search" data-tab-name="Search" data-tab-offset="-100%"><i class="fa fa-search"></i>Search</div>
+        <div class="tab tab-history" data-tab-name="History" data-tab-offset="-200%"><i class="fa fa-list-alt"></i>History</div>
+    </div>
+
+</body>
+</html>
