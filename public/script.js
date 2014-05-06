@@ -50,8 +50,6 @@
 
 		var _this = this;
 		Stock.findBySymbols(symbols, function(jsonResults) {
-			console.log(symbols);
-			console.log(jsonResults);
 			var newStocks = [];
 			if (jsonResults.query.results.quote.length) {
 				for (var x in jsonResults.query.results.quote) {
@@ -601,8 +599,6 @@
 			transition: "all " + Math.floor(speed / 2) + "ms ease-in-out"
 		});
 
-		console.log("Started at " + Date.now());
-
 		this.start();
 	};
 
@@ -622,10 +618,6 @@
 
 		this.flippers = [];
 		var _this = this;
-
-		console.log("Start time should be: " + (Date.now() + Math.floor((speed / 3) * 0)));
-		console.log("Start time should be: " + (Date.now() + Math.floor((speed / 3) * 1)));
-		console.log("Start time should be: " + (Date.now() + Math.floor((speed / 3) * 2)));
 
 		setTimeout(function() {
 			_this.flippers.push(new LoadFlipper(_this.$el.find(".load-bar").eq(0), speed));
@@ -664,7 +656,6 @@
 	};
 
 	API.query = function(search, callback) {
-		console.log("QUERYING: " + search);
 		$.getJSON("/search?q=" + search, callback);
 	}
 
@@ -763,14 +754,16 @@ $(function() {
 			transition: "all 50ms ease-in-out",
 			opacity: 0
 		});
-		var loader = new Loader($(".portfolio"), 600, true);
-		portfolio.refresh(function() {
-			loader.stop();
+		setTimeout(function() {
+			var loader = new Loader($(".portfolio"), 600, true);
+			portfolio.refresh(function() {
+				loader.stop();
 
-			$(".portfolio .stock-list .stock").css({
-				transition: "all 300ms ease-in-out",
-				opacity: 1
+				$(".portfolio .stock-list .stock").css({
+					transition: "all 300ms ease-in-out",
+					opacity: 1
+				});
 			});
-		});
+		}, 50);
 	};
 });
