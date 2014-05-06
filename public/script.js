@@ -196,6 +196,8 @@
 				StockView.stockViews[x].render();
 			}
 
+			portfolio.updateMoneyAmount();
+
 			if (callback) callback();
 		});
 	};
