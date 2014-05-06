@@ -4,7 +4,11 @@ $(function() {
 		y: 0
 	}
 
-	window.pullAmount = -50;
+	var PULL_BOTTOM = -36;
+	var pullAmount = PULL_BOTTOM;
+
+	var pullingToRefresh = false;
+
 
 	var extractTouchPositionFromEvent = function(event) {
 		if (event.originalEvent.touches && event.originalEvent.touches.length > 0) {
@@ -24,21 +28,63 @@ $(function() {
 
 		var yDiff = touchPos.y - mousePos.y;
 
-		if ($(".container").scrollTop() == 0 && (window.pullAmount == -50 && yDiff < 0) || (window.pullAmount > -50)) {
-			window.pullAmount -= yDiff;
-			if (window.pullAmount > 0) {
-				window.pullAmount = 0;
+		var correctTarget = $(event.target).parents("#portfolio").length > 0 || event.target.id == "portfolio";
+		var correctScrollAmount = (pullAmount == PULL_BOTTOM && yDiff < 0) || (pullAmount > PULL_BOTTOM);
+		var scrolledToTop = $("#portfolio").scrollTop() == 0;
+
+		if (correctTarget && !window.noPortfolio && scrolledToTop && correctScrollAmount) {
+			pullAmount -= yDiff;
+			if (pullAmount > 0) {
+				pullAmount = 0;
 			}
-			if (window.pullAmount < -50) {
-				window.pullAmount = -50;
+			if (pullAmount < PULL_BOTTOM) {
+				pullAmount = PULL_BOTTOM;
 			}
 
-			$(".search").css({
-				"margin-top": window.pullAmount + "px",
+			$(".pull-to-refresh").css({
+				"margin-top": pullAmount + "px",
 				transition: "0"
 			});
+
+			pullingToRefresh = true;
+
+			if (pullAmount != 0) {
+				$(".pull-to-refresh-text").html("Pull to refresh");
+				$(".pull-to-refresh i").addClass("fa-chevron-up").removeClass("fa-chevron-down");
+			} else {
+				$(".pull-to-refresh-text").html("Release to refresh");
+				$(".pull-to-refresh i").addClass("fa-chevron-down").removeClass("fa-chevron-up");
+			}
+
 			event.preventDefault();
 		}
 		touchPos = mousePos;
+	});
+
+	$(window).on("touchend", function(event) {
+		if (pullingToRefresh && pullAmount == 0) {
+			if (window.onPullToRefresh) window.onPullToRefresh();
+
+			$(".pull-to-refresh").css({
+				transition: "all 200ms ease-in-out",
+				"margin-top": PULL_BOTTOM + "px"
+			});
+
+			pullAmount = PULL_BOTTOM;
+		} else if (pullingToRefresh) {
+			$(".pull-to-refresh").css({
+				transition: "all 200ms ease-in-out",
+				"margin-top": PULL_BOTTOM + "px"
+			});
+
+			pullAmount = PULL_BOTTOM;
+		}
+
+		if (pullingToRefresh) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+
+		pullingToRefresh = false;
 	});
 });

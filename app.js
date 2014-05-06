@@ -10,20 +10,10 @@ var test = companies[0].name.indexOf("Adarsh");
 app.use(express.static(path.resolve(path.dirname(require.main.filename), 'public')));
 
 var generateNameAndSymbolFromIndices = function(nameIndex, symbolIndex, company, searchString) {
-	var name = company.name;
-	var symbol = company.symbol;
-
-	if (nameIndex != -1) {
-		// name = company.name.substring(0, nameIndex) + "[strong]" + company.name.substr(nameIndex, searchString.length) + "[/strong]" + company.name.substr(nameIndex + searchString.length);
-	}
-
-	if (symbolIndex != -1) {
-		// symbol = company.symbol.substring(0, symbolIndex) + "[strong]" + company.symbol.substr(symbolIndex, searchString.length) + "[/strong]" + company.symbol.substr(symbolIndex + searchString.length);
-	}
-
+	// TODO possibly add fields with the relevant parts of symbol/name bolded
 	return {
-		name: name,
-		symbol: symbol
+		name: company.name,
+		symbol: company.symbol
 	}
 }
 

@@ -44,10 +44,7 @@
 	};
 
 	Search.addStocksBySymbols = function(symbols, callback) {
-		// First remove old search stock-list
-		for (var x in this.stocks) {
-			this.stocks[x].$el.remove();
-		}
+		$("#search .stock-list .stock").remove();
 
 		this.stocks = [];
 
@@ -159,7 +156,15 @@
 				portfolio.updateMoneyAmount();
 			}
 
-			portfolio.addStocksBySymbols(symbols, finished)
+			if (symbols.length > 0) {
+				portfolio.addStocksBySymbols(symbols, finished);
+				window.noPortfolio = false;
+				$(".no-portfolio").hide();
+			} else {
+				if (callback) callback(portfolio);
+				window.noPortfolio = true;
+				$(".no-portfolio").show();
+			}
 		} else {
 			portfolio.money = 10000;
 			portfolio.updateMoneyAmount();
@@ -192,11 +197,11 @@
 
 		this.amountOwned = 0;
 
-		// if (Stock.stocks[this.symbol]) {
-		// 	return Stock.stocks[this.symbol];
-		// }
+		if (Stock.stocks[this.symbol]) {
+			return Stock.stocks[this.symbol];
+		}
 
-		// Stock.stocks[this.symbol] = this;
+		Stock.stocks[this.symbol] = this;
 	};
 
 	Stock.stocks = {};
@@ -362,6 +367,14 @@
 		StockView.stockViews.push(this);
 	};
 
+	StockView.updateStockViewsBySymbol = function(symbol) {
+		for (var x in this.stockViews) {
+			if (this.stockViews[x].stock.symbol == symbol) {
+				this.stockViews[x].render();
+			}
+		}
+	}
+
 	StockView.stockViews = [];
 
 	StockView.prototype.events = function() {
@@ -402,6 +415,14 @@
 
 		this.$el.remove();
 
+		if ($(".portfolio .stock-list .stock").length == 0) {
+			$(".no-portfolio").show();
+			window.noPortfolio = true;
+		} else {
+			window.noPortfolio = false;
+			$(".no-portfolio").hide();
+		}
+
 		this.portfolio.save();
 	};
 
@@ -409,20 +430,28 @@
 		event.preventDefault();
 		event.stopPropagation();
 
-		alert(this.stock.buy(this.tradeAmount, this.portfolio));
+		this.stock.buy(this.tradeAmount, this.portfolio);
 		this.portfolio.save();
 
-		this.render();
+		StockView.updateStockViewsBySymbol(this.stock.symbol);
+
+		if ($(".portfolio .stock-list .stock").length == 0) {
+			$(".no-portfolio").show();
+			window.noPortfolio = true;
+		} else {
+			window.noPortfolio = false;
+			$(".no-portfolio").hide();
+		}
 	};
 
 	StockView.prototype.sell = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 
-		alert(this.stock.sell(this.tradeAmount, this.portfolio));
+		this.stock.sell(this.tradeAmount, this.portfolio);
 		this.portfolio.save();
 
-		this.render();
+		StockView.updateStockViewsBySymbol(this.stock.symbol);
 	};
 
 	StockView.prototype.incr = function(event) {
@@ -454,10 +483,12 @@
 
 	StockView.prototype.onTradeAmountDefocus = function() {
 		this.tradeAmount = Math.min(
-			parseInt(this.$el.find(".amount-trading").val()),
-			Math.max(this.stock.amountOwned, 1),
-			this.tradeAmount * this.stock.price
-		);
+			Math.max(
+				Math.max(this.stock.amountOwned, 1),
+				Math.floor(this.portfolio.money / (this.tradeAmount * this.stock.price))
+			),
+			parseInt(this.$el.find(".amount-trading").val()) || 1
+		)
 
 		this.render();
 	}
@@ -495,6 +526,12 @@
 			} else {
 				this.$el.find(".portfolio-remove").prop("disabled", false);
 			}
+		}
+
+		if (this.tradeAmount * this.stock.price > this.portfolio.money) {
+			this.$el.find(".buy-button").prop("disabled", true);
+		} else {
+			this.$el.find(".buy-button").prop("disabled", false);
 		}
 
 		this.$el.find(".amount-trading").val(this.tradeAmount);
@@ -595,28 +632,14 @@ $(function() {
 
 		if ($(".portfolio .stock-list .stock").length == 0) {
 			$(".no-portfolio").show();
+			window.noPortfolio = true;
 		} else {
+			window.noPortfolio = false;
 			$(".no-portfolio").hide();
 		}
 	});
 
 	window.portfolio = portfolio;
-
-	$(".title button").on("click", function() {
-		if (window.pullAmount != -50) {
-			$(".search").css({
-				transition: "all 200ms ease-in-out",
-				"margin-top": "-50px"
-			});
-			window.pullAmount = -50;
-		} else {
-			$(".search").css({
-				transition: "all 200ms ease-in-out",
-				"margin-top": "0"
-			});
-			window.pullAmount = 0;
-		}
-	});
 
 	$(".tab").on("click", function() {
 		var offset = $(this).data("tab-offset");
@@ -681,5 +704,21 @@ $(function() {
 			}, 300);
 		}
 	});
+
+	$("#search-form").submit(function() {
+		$(".search-bar input").blur();
+
+		return false;
+	});
+
+	window.onPullToRefresh = function() {
+		portfolio.save();
+
+		$(".portfolio .stock-list .stock").remove();
+		var loader = new Loader($(".portfolio"));
+		portfolio = Portfolio.load(function(portfolio) {
+			loader.stop();
+		});
+	};
 
 });
