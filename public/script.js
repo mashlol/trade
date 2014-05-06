@@ -716,7 +716,9 @@ $(function() {
 
 		$(".portfolio .stock-list .stock").remove();
 		var loader = new Loader($(".portfolio"));
-		portfolio = Portfolio.load(function(portfolio) {
+		Portfolio.load(function(newPortfolio) {
+			portfolio.money = newPortfolio.money;
+			portfolio.stocks = newPortfolio.stocks;
 			loader.stop();
 		});
 	};
