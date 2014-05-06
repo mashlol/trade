@@ -174,6 +174,34 @@
 		return portfolio;
 	};
 
+	Portfolio.prototype.refresh = function(callback) {
+		// Build list of symbols in portfolio
+		var symbols = [];
+		for (var x in this.stocks) {
+			symbols.push(this.stocks[x].symbol);
+		}
+
+		Stock.findBySymbols(symbols, function(jsonResults) {
+			// Update the stock prices, etc
+			if (jsonResults.query.results.quote.length) {
+				for (var x in jsonResults.query.results.quote) {
+					var stockJsonResult = jsonResults.query.results.quote[x];
+					Stock.stocks[stockJsonResult.Symbol].update(stockJsonResult);
+				}
+			} else {
+				var stockJsonResult = jsonResults.query.results.quote;
+				Stock.stocks[stockJsonResult.Symbol].update(stockJsonResult);
+			}
+
+			// Now update all StockViews
+			for (var x in StockView.stockViews) {
+				StockView.stockViews[x].render();
+			}
+
+			if (callback) callback();
+		});
+	};
+
 	Portfolio.prototype.updateMoneyAmount = function() {
 		var totalMoney = this.money;
 
@@ -190,10 +218,8 @@
 (function() {
 	var Stock = function(jsonResult) {
 		this.symbol = jsonResult.symbol;
-		this.price = jsonResult.LastTradePriceOnly;
-		this.points = jsonResult.Change;
-		this.percent = jsonResult.PercentChange;
 		this.name = jsonResult.Name;
+		this.update(jsonResult);
 
 		this.amountOwned = 0;
 
@@ -205,6 +231,12 @@
 	};
 
 	Stock.stocks = {};
+
+	Stock.prototype.update = function(jsonResult) {
+		this.price = jsonResult.LastTradePriceOnly;
+		this.points = jsonResult.Change;
+		this.percent = jsonResult.PercentChange;
+	}
 
 	Stock.prototype.buy = function(amount, portfolio) {
 		if (portfolio.money >= this.price * amount) {
@@ -561,8 +593,15 @@
 })();
 
 (function() {
-	var LoadFlipper = function($loadBar) {
+	var LoadFlipper = function($loadBar, speed) {
 		this.$loadBar = $loadBar;
+		this.speed = speed;
+
+		this.$loadBar.css({
+			transition: "all " + Math.floor(speed / 2) + "ms ease-in-out"
+		});
+
+		console.log("Started at " + Date.now());
 
 		this.start();
 	};
@@ -570,32 +609,40 @@
 	LoadFlipper.prototype.start = function() {
 		this.$loadBar.toggleClass("rotated");
 
-		this.timer = setTimeout(this.start.bind(this), 500);
+		this.timer = setTimeout(this.start.bind(this), Math.floor(this.speed / 2));
 	};
 
 	LoadFlipper.prototype.stop = function() {
 		clearTimeout(this.timer);
 	};
 
-	var Loader = function(element) {
+	var Loader = function(element, speed, prepend) {
+		speed = speed || 1000;
 		this.$el = $("#template-loader").children().eq(0).clone();
 
 		this.flippers = [];
 		var _this = this;
 
-		setTimeout(function() {
-			_this.flippers.push(new LoadFlipper(_this.$el.find(".load-bar").eq(0)))
-		}, 0);
+		console.log("Start time should be: " + (Date.now() + Math.floor((speed / 3) * 0)));
+		console.log("Start time should be: " + (Date.now() + Math.floor((speed / 3) * 1)));
+		console.log("Start time should be: " + (Date.now() + Math.floor((speed / 3) * 2)));
 
 		setTimeout(function() {
-			_this.flippers.push(new LoadFlipper(_this.$el.find(".load-bar").eq(1)))
-		}, 333);
+			_this.flippers.push(new LoadFlipper(_this.$el.find(".load-bar").eq(0), speed));
+		}, Math.floor((speed / 3) * 0));
 
 		setTimeout(function() {
-			_this.flippers.push(new LoadFlipper(_this.$el.find(".load-bar").eq(2)))
-		}, 666);
+			_this.flippers.push(new LoadFlipper(_this.$el.find(".load-bar").eq(1), speed));
+		}, Math.floor((speed / 3) * 1));
 
-		element.append(this.$el);
+		setTimeout(function() {
+			_this.flippers.push(new LoadFlipper(_this.$el.find(".load-bar").eq(2), speed));
+		}, Math.floor((speed / 3) * 2));
+
+		if (prepend)
+			element.prepend(this.$el);
+		else
+			element.append(this.$el);
 	};
 
 	Loader.prototype.stop = function() {
@@ -626,7 +673,7 @@
 
 $(function() {
 	History.load();
-	var loader = new Loader($(".portfolio"));
+	var loader = new Loader($(".portfolio"), 1000);
 	var portfolio = Portfolio.load(function(portfolio) {
 		loader.stop();
 
@@ -712,15 +759,18 @@ $(function() {
 	});
 
 	window.onPullToRefresh = function() {
-		portfolio.save();
-
-		$(".portfolio .stock-list .stock").remove();
-		var loader = new Loader($(".portfolio"));
-		Portfolio.load(function(newPortfolio) {
-			portfolio.money = newPortfolio.money;
-			portfolio.stocks = newPortfolio.stocks;
+		$(".portfolio .stock-list .stock").css({
+			transition: "all 50ms ease-in-out",
+			opacity: 0
+		});
+		var loader = new Loader($(".portfolio"), 600, true);
+		portfolio.refresh(function() {
 			loader.stop();
+
+			$(".portfolio .stock-list .stock").css({
+				transition: "all 300ms ease-in-out",
+				opacity: 1
+			});
 		});
 	};
-
 });
